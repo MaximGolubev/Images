@@ -3,7 +3,7 @@
 #include"JpegCompressor\jpgd.h"
 #include"JpegCompressor\jpge.h"
 
-JPGImage::JPGImage(const std::string& fileName)
+JPGImage::JPGImage(const std::string& fileName) : AbstractImage()
 {
 	_channelCount = 4;
 	int width, height, actualComps;		// в actualComps хранится реальное кол-во каналов, в данном случае 3, хотя массив мы забиваем так, будто бы 4
