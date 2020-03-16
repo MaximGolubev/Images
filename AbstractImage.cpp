@@ -3,7 +3,7 @@
 #include "JPGImage.h"
 
 #include <iostream>
-#include <stdexcept>	// для тех, кто понимает
+#include <stdexcept>	// РґР»СЏ С‚РµС…, РєС‚Рѕ РїРѕРЅРёРјР°РµС‚
 #include <cstring>		// memcpy
 #include <cassert>
 
@@ -33,11 +33,11 @@ ImageSize AbstractImage::size() const
 
 AbstractImage* AbstractImage::create(const std::string& fileName, ImageType type)
 {
-	// сюда добавить разбор fileName
-	// в зависимости от расширения в названии файла можно вывести тип изображения
-	// и создать соответствующее изображение.
-	// Наивная реализация — искать точку и брать остаток строки 
-	// (тогда сможем распарсить и .bmp, и .jpg, и .jpeg, и т.д.)
+	// СЃСЋРґР° РґРѕР±Р°РІРёС‚СЊ СЂР°Р·Р±РѕСЂ fileName
+	// РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ СЂР°СЃС€РёСЂРµРЅРёСЏ РІ РЅР°Р·РІР°РЅРёРё С„Р°Р№Р»Р° РјРѕР¶РЅРѕ РІС‹РІРµСЃС‚Рё С‚РёРї РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
+	// Рё СЃРѕР·РґР°С‚СЊ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ.
+	// РќР°РёРІРЅР°СЏ СЂРµР°Р»РёР·Р°С†РёСЏ вЂ” РёСЃРєР°С‚СЊ С‚РѕС‡РєСѓ Рё Р±СЂР°С‚СЊ РѕСЃС‚Р°С‚РѕРє СЃС‚СЂРѕРєРё 
+	// (С‚РѕРіРґР° СЃРјРѕР¶РµРј СЂР°СЃРїР°СЂСЃРёС‚СЊ Рё .bmp, Рё .jpg, Рё .jpeg, Рё С‚.Рґ.)
 
 	switch (type) {
 		case ImageType::PNG: {
@@ -48,8 +48,8 @@ AbstractImage* AbstractImage::create(const std::string& fileName, ImageType type
 		}
 		// other types
 		default:
-			// throw std::runtime_error("Invalid type"); // вот пройдете исключения и будет хорошо
-			assert(0 == 1);		// принудительно завершаем работу (можно через exit)
+			// throw std::runtime_error("Invalid type"); // РІРѕС‚ РїСЂРѕР№РґРµС‚Рµ РёСЃРєР»СЋС‡РµРЅРёСЏ Рё Р±СѓРґРµС‚ С…РѕСЂРѕС€Рѕ
+			assert(0 == 1);		// РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ Р·Р°РІРµСЂС€Р°РµРј СЂР°Р±РѕС‚Сѓ (РјРѕР¶РЅРѕ С‡РµСЂРµР· exit)
 	}
 
 	return nullptr;
@@ -64,6 +64,10 @@ void AbstractImage::resize(const ImageSize& size)
 	if (size.height != height()) {
 		heightResize(size.height);
 	}
+}
+
+void AbstractImage::resize(const size_t w, const size_t h)
+{
 }
 
 void AbstractImage::widthResize(const size_t width)
@@ -89,13 +93,13 @@ void AbstractImage::widthResize(const size_t width)
 		}
 	}
 
-	// _pixelData = std::move(buffer);	// тут будет вызван оператор присваивания перемещением
-	_pixelData.moveFrom(buffer);		// аналогично
+	// _pixelData = std::move(buffer);	// С‚СѓС‚ Р±СѓРґРµС‚ РІС‹Р·РІР°РЅ РѕРїРµСЂР°С‚РѕСЂ РїСЂРёСЃРІР°РёРІР°РЅРёСЏ РїРµСЂРµРјРµС‰РµРЅРёРµРј
+	_pixelData.moveFrom(buffer);		// Р°РЅР°Р»РѕРіРёС‡РЅРѕ
 }
 
 void AbstractImage::heightResize(const size_t height)
 {
-	// TODO: принцип тот же, что и у widthResize
+	// TODO: РїСЂРёРЅС†РёРї С‚РѕС‚ Р¶Рµ, С‡С‚Рѕ Рё Сѓ widthResize
 }
 
 void AbstractImage::toBlackWhite()
@@ -111,6 +115,14 @@ void AbstractImage::toBlackWhite()
 			}
 		}
 	}
+}
+
+void AbstractImage::toColorInversion()
+{
+}
+
+void AbstractImage::toSepia()
+{
 }
 
 AbstractImage::AbstractImage() 
@@ -153,7 +165,7 @@ Pixel::Pixel(uchar r, uchar g, uchar b, uchar a)
 
 size_t Pixel::metric() const
 {
-	return red + green + blue;		// метрику можете менять, ваше пространство пикселей — ваши правила
+	return red + green + blue;		// РјРµС‚СЂРёРєСѓ РјРѕР¶РµС‚Рµ РјРµРЅСЏС‚СЊ, РІР°С€Рµ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРѕ РїРёРєСЃРµР»РµР№ вЂ” РІР°С€Рё РїСЂР°РІРёР»Р°
 }
 
 size_t Pixel::colorAvg() const
@@ -205,4 +217,24 @@ void PixelMatrix::moveFrom(PixelMatrix& mv)
 PixelMatrix::~PixelMatrix()
 {
 	delete[] _data;
+}
+
+AbstractImage* AbstractImage::getResizeImage(const ImageSize& size) const
+{
+	return nullptr;
+}
+
+AbstractImage* AbstractImage::getBlackWhite() const
+{
+	return nullptr;
+}
+
+AbstractImage* AbstractImage::getColorInversion() const
+{
+	return nullptr;
+}
+
+AbstractImage* AbstractImage::getSepia() const
+{
+	return nullptr;
 }

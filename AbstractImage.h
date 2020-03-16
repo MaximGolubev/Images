@@ -19,10 +19,10 @@ struct ImageSize {
 };
 
 
-// TODO: подумать над элегантным способом хранения компонент rgb и rgba,
-// чтобы все было полиморфно и удобно.
-// Сейчас при чтении bmp и jpg скорее всего придется преобразовывать массив 
-// размера 3 * ширина * высота в массив 4 * ширина * высота.
+// TODO: РїРѕРґСѓРјР°С‚СЊ РЅР°Рґ СЌР»РµРіР°РЅС‚РЅС‹Рј СЃРїРѕСЃРѕР±РѕРј С…СЂР°РЅРµРЅРёСЏ РєРѕРјРїРѕРЅРµРЅС‚ rgb Рё rgba,
+// С‡С‚РѕР±С‹ РІСЃРµ Р±С‹Р»Рѕ РїРѕР»РёРјРѕСЂС„РЅРѕ Рё СѓРґРѕР±РЅРѕ.
+// РЎРµР№С‡Р°СЃ РїСЂРё С‡С‚РµРЅРёРё bmp Рё jpg СЃРєРѕСЂРµРµ РІСЃРµРіРѕ РїСЂРёРґРµС‚СЃСЏ РїСЂРµРѕР±СЂР°Р·РѕРІС‹РІР°С‚СЊ РјР°СЃСЃРёРІ 
+// СЂР°Р·РјРµСЂР° 3 * С€РёСЂРёРЅР° * РІС‹СЃРѕС‚Р° РІ РјР°СЃСЃРёРІ 4 * С€РёСЂРёРЅР° * РІС‹СЃРѕС‚Р°.
 #pragma pack(push, 1)
 struct Pixel {
 	uchar red;
@@ -48,11 +48,11 @@ public:
 
 	Pixel* operator[](size_t i) const;
 
-	// для продвинутых - гуглить move-семантику 
-	// данный метод будет вызываться в случае, когда аргумент — rvalue (временный объект)
-	// суть: если после приравнивания больше не нужен объект mv, нам не нужно копировать
-	// данные, а можно просто перекинуть указатели из одного объекта в другой, при этом
-	// объект-аргумент следует обязательно привести в целостное начальное состояние
+	// РґР»СЏ РїСЂРѕРґРІРёРЅСѓС‚С‹С… - РіСѓРіР»РёС‚СЊ move-СЃРµРјР°РЅС‚РёРєСѓ 
+	// РґР°РЅРЅС‹Р№ РјРµС‚РѕРґ Р±СѓРґРµС‚ РІС‹Р·С‹РІР°С‚СЊСЃСЏ РІ СЃР»СѓС‡Р°Рµ, РєРѕРіРґР° Р°СЂРіСѓРјРµРЅС‚ вЂ” rvalue (РІСЂРµРјРµРЅРЅС‹Р№ РѕР±СЉРµРєС‚)
+	// СЃСѓС‚СЊ: РµСЃР»Рё РїРѕСЃР»Рµ РїСЂРёСЂР°РІРЅРёРІР°РЅРёСЏ Р±РѕР»СЊС€Рµ РЅРµ РЅСѓР¶РµРЅ РѕР±СЉРµРєС‚ mv, РЅР°Рј РЅРµ РЅСѓР¶РЅРѕ РєРѕРїРёСЂРѕРІР°С‚СЊ
+	// РґР°РЅРЅС‹Рµ, Р° РјРѕР¶РЅРѕ РїСЂРѕСЃС‚Рѕ РїРµСЂРµРєРёРЅСѓС‚СЊ СѓРєР°Р·Р°С‚РµР»Рё РёР· РѕРґРЅРѕРіРѕ РѕР±СЉРµРєС‚Р° РІ РґСЂСѓРіРѕР№, РїСЂРё СЌС‚РѕРј
+	// РѕР±СЉРµРєС‚-Р°СЂРіСѓРјРµРЅС‚ СЃР»РµРґСѓРµС‚ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РїСЂРёРІРµСЃС‚Рё РІ С†РµР»РѕСЃС‚РЅРѕРµ РЅР°С‡Р°Р»СЊРЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ
 	PixelMatrix& operator=(PixelMatrix&& mv) noexcept;
 
 	void moveFrom(PixelMatrix& mv);
@@ -74,20 +74,28 @@ public:
 	size_t		width() const;
 	ImageSize	size() const;
 
-	static AbstractImage* create(const std::string& fileName, ImageType type = ImageType::Unknow);	// фабричная штука
+	static AbstractImage* create(const std::string& fileName, ImageType type = ImageType::Unknow);	// С„Р°Р±СЂРёС‡РЅР°СЏ С€С‚СѓРєР°
 
-	void resize(const ImageSize& size);				// изменить размер
-	void resize(const size_t w, const size_t h);	// перегрузка изменения размера
-	void widthResize(const size_t width);			// изменить ширину
-	void heightResize(const size_t height);			// изменить высоту
-	void toBlackWhite();							// превратить в ЧБ
-	void toNegative();								// превратить в негатив
-	void toColorInversion();						// инверсия цветов
+	// РјСѓС‚Р°С†РёСЏ С‚РµРєСѓС‰РµРіРѕ РёР·РјРµРЅРµРЅРёСЏ
+	void resize(const ImageSize& size);						// РёР·РјРµРЅРёС‚СЊ СЂР°Р·РјРµСЂ
+	void resize(const size_t w, const size_t h);			// РїРµСЂРµРіСЂСѓР·РєР° РёР·РјРµРЅРµРЅРёСЏ СЂР°Р·РјРµСЂР°
+	void widthResize(const size_t width);					// РёР·РјРµРЅРёС‚СЊ С€РёСЂРёРЅСѓ
+	void heightResize(const size_t height);					// РёР·РјРµРЅРёС‚СЊ РІС‹СЃРѕС‚Сѓ
+	void toBlackWhite();									// РїСЂРµРІСЂР°С‚РёС‚СЊ РІ Р§Р‘
+	void toColorInversion();								// РёРЅРІРµСЂСЃРёСЏ С†РІРµС‚РѕРІ
+	void toSepia();											// СЃРµРїРёСЏ
+
+	// РїРѕР»СѓС‡РµРЅРёРµ РЅРѕРІРѕРіРѕ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ СЃ СЃРѕС…СЂР°РЅРµРЅРёРµРј С„РѕСЂРјР°С‚Р°
+	AbstractImage* getResizeImage(const ImageSize& size) const;  
+	AbstractImage* getBlackWhite() const;
+	AbstractImage* getBlackWhite() const;
+	AbstractImage* getColorInversion() const;
+	AbstractImage* getSepia() const;
 	
-	// use your imagination: имея матрицу пикселей, вы можете реализовать любые фильтры
+	// use your imagination: РёРјРµСЏ РјР°С‚СЂРёС†Сѓ РїРёРєСЃРµР»РµР№, РІС‹ РјРѕР¶РµС‚Рµ СЂРµР°Р»РёР·РѕРІР°С‚СЊ Р»СЋР±С‹Рµ С„РёР»СЊС‚СЂС‹
 
 	virtual void save(const std::string& output) = 0;
-	virtual std::string stringType() const = 0;		// ".png" и т.д.
+	virtual std::string stringType() const = 0;		// ".png" Рё С‚.Рґ.
 protected:
 	AbstractImage();
 	PixelMatrix		_pixelData;
