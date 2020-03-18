@@ -3,11 +3,14 @@
 #include"JpegCompressor\jpgd.h"
 #include"JpegCompressor\jpge.h"
 
-JPGImage::JPGImage(const std::string& fileName) : AbstractImage()
+#include <cassert>
+
+JPGImage::JPGImage(const std::string& fileName)
 {
 	_channelCount = 4;
-	int width, height, actualComps;		// в actualComps хранится реальное кол-во каналов, в данном случае 3, хотя массив мы забиваем так, будто бы 4
+	int width, height, actualComps;		// РІ actualComps С…СЂР°РЅРёС‚СЃСЏ СЂРµР°Р»СЊРЅРѕРµ РєРѕР»-РІРѕ РєР°РЅР°Р»РѕРІ, РІ РґР°РЅРЅРѕРј СЃР»СѓС‡Р°Рµ 3, С…РѕС‚СЏ РјР°СЃСЃРёРІ РјС‹ Р·Р°Р±РёРІР°РµРј С‚Р°Рє, Р±СѓРґС‚Рѕ Р±С‹ 4
 	unsigned char* data = jpgd::decompress_jpeg_image_from_file(fileName.c_str(), &width, &height, &actualComps, _channelCount);
+	assert(data != nullptr);
 	PixelMatrix buffer(reinterpret_cast<Pixel*>(data), width, height);
 	_pixelData.moveFrom(buffer);
 	if (data) {

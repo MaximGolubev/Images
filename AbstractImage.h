@@ -88,7 +88,6 @@ public:
 	// получение нового изображения с сохранением формата
 	AbstractImage* getResizeImage(const ImageSize& size) const;  
 	AbstractImage* getBlackWhite() const;
-	AbstractImage* getBlackWhite() const;
 	AbstractImage* getColorInversion() const;
 	AbstractImage* getSepia() const;
 	

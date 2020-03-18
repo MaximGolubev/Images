@@ -176,6 +176,9 @@ size_t Pixel::colorAvg() const
 PixelMatrix::PixelMatrix(size_t w, size_t h)
 	: _height(h), _width(w)
 {
+	if (h == 0 || w == 0) {
+		_data = nullptr;
+	}
 	_data = new Pixel[w * h];
 }
 
